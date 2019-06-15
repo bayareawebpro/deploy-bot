@@ -37,7 +37,7 @@ class PostActivate extends Command
         if($this->isSuccessful(
             Bash::script("local", 'deploy/flush', $path)
         )){
-            SlackApi::message("🧩 Caches Flushed Successfully.");
+            SlackApi::message("🗑 Caches Flushed Successfully.");
         }else{
             SlackApi::message("🤬 Failed to Flush Caches!");
             exit(1);
