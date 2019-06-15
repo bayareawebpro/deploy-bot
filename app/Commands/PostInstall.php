@@ -30,8 +30,21 @@ class PostInstall extends Command
      */
     public function handle()
     {
-        //deploybot post:install "staging" "/home/forge/default/current" "XXX"
+        $path = $this->argument('path');
+        $hash = $this->argument('hash');
+        $env = $this->argument('env');
+
         SlackApi::message("🧩 Dependencies Installed Successfully!");
+
+        SlackApi::message("🛠 Compiling Assets...");
+        if($this->isSuccessful(
+            Bash::script("local", 'deploy/assets', $path)
+        )){
+            SlackApi::message("🧩 Assets Compiled Successfully.");
+        }else{
+            SlackApi::message("🤬 Failed to Compiled Assets!");
+            exit(1);
+        }
     }
 
     /**

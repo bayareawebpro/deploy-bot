@@ -41,8 +41,8 @@ class PreClone extends Command
         $message = "💪 *Deployment to \"$env\" InProgress!*";
         $btnText = "Envoyer.io";
         $btnUrl = "https://envoyer.io/projects/$project";
-
         SlackApi::message($message, $btnText, $btnUrl);
+        SlackApi::message("🛠 Downloading Repository...");
     }
 
     /**
