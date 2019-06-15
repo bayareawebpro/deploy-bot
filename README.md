@@ -28,6 +28,7 @@ function deploybot(){
 deploybot update
 ```
 
+### Envoyer Hooks
 ```
 DeployBot-PreClone
 deploybot pre:clone staging {{ release }} {{ sha }};
@@ -52,8 +53,4 @@ deploybot pre:purge staging {{ release }} {{ sha }};
 
 DeployBot-PostPurge
 deploybot post:purge staging {{ release }} {{ sha }};
-
-
-deploybot post:clone "staging" "/home/forge/default/current" "XXX"
-
 ```
