@@ -42,7 +42,7 @@ class PostInstall extends Command
         )){
             SlackApi::message("🧩 Assets Compiled Successfully.");
         }else{
-            SlackApi::message("🤬 Failed to Compiled Assets!");
+            SlackApi::message("🤬 Failed to Compile Assets!");
             exit(1);
         }
     }
