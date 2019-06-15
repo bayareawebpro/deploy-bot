@@ -1,5 +1,10 @@
 # DeployBot
-Laravel Zero Deployment Bot for Envoyer.io
+Laravel Zero Deployment Bot for Envoyer.io.
+
+This package gives you a starting point for separating your deployment hooks 
+into an easily update-able cli that notifies you on slack for every step.
+Example commands for working with various tasks are included.
+Create a fork to customize this code for your deployment workflow.
 
 ```
 #Environment Settings
@@ -23,7 +28,9 @@ function deploybot(){
 }
 ```
 
-### Update Package Command
+#### Update Command BuiltIn
+Install it un-compiled on your server and run `deploybot update` to pull in your latest changes.
+
 ```
 deploybot update
 ```

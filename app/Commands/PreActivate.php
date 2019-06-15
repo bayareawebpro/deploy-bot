@@ -42,7 +42,6 @@ class PreActivate extends Command
 
         if(in_array($env, ['staging'])){
             SlackApi::message("🛠 Migrating Database...");
-
             if($this->isSuccessful(
                 Bash::script("local", 'deploy/migrate', $path)
             )){
