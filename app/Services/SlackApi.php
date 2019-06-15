@@ -14,9 +14,9 @@
          $actionUrl = null
      ){
          $message = [
-             'channel'     => '#logger',
-             'username'    => config('app.name'),
-             'icon_emoji'  => ':alien:',
+             'channel'     => config('slack.channel'),
+             'username'    => config('slack.username'),
+             'icon_emoji'  => config('slack.emoji'),
              'blocks' => [
                  [
                      'type' => 'section',
@@ -46,7 +46,7 @@
       */
      protected static function send(array $data)
      {
-         $ch = curl_init(config('app.slack_url'));
+         $ch = curl_init(config('slack.endpoint'));
          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
          curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

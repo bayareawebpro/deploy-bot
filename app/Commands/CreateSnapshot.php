@@ -3,7 +3,9 @@
 namespace App\Commands;
 
 use App\Services\Bash;
+use App\Services\SlackApi;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use LaravelZero\Framework\Commands\Command;
 
@@ -48,6 +50,9 @@ class CreateSnapshot extends Command
         $path = config('filesystems.disks.production.root');
         $snapshot = "$path/$hash.sql";
 
+        //Insure Directory Exists.
+        $this->makeDirectory($path);
+
         //Create Production Snapshot from Staging Database.
         if($isNewRelease){
             $this->stopOnFailure(
@@ -56,6 +61,7 @@ class CreateSnapshot extends Command
                         ->isSuccessful();
                 })
             );
+            SlackApi::message("Staging Snapshot Created Successfully.");
         }
 
         //Load Production Snapshot into Live Database.
@@ -87,6 +93,9 @@ class CreateSnapshot extends Command
         $path = config('filesystems.disks.staging.root');
         $snapshot = "$path/$hash.sql";
 
+        //Insure Directory Exists.
+        $this->makeDirectory($path);
+
         //Create Snapshot for Staging Database.
         $this->stopOnFailure(
             $this->task("Create Snapshot $hash for Staging", function() use ($snapshot){
@@ -109,6 +118,16 @@ class CreateSnapshot extends Command
     protected function stopOnFailure(bool $status){
         if($status === false){
             exit;
+        }
+    }
+
+    /**
+     * Make New Directory
+     * @param string $path
+     */
+    protected function makeDirectory(string $path){
+        if(!File::isDirectory($path)){
+            File::makeDirectory($path, 0755, true);
         }
     }
 

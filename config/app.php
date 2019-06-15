@@ -14,7 +14,6 @@ return [
     */
 
     'name' => 'DbTool',
-    'slack_url' => env('SLACK_ENDPOINT'),
     /*
     |--------------------------------------------------------------------------
     | Application Version
