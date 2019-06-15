@@ -29,7 +29,6 @@ class CreateSnapshot extends Command
      */
     public function handle()
     {
-        $this->info("Creating Staging Database Snapshot");
         @ini_set('max_execution_time', 10080);
         @ini_set('memory_limit', '100M');
         $env = $this->argument('env');
@@ -44,7 +43,8 @@ class CreateSnapshot extends Command
      */
     protected function production($hash)
     {
-        $this->alert("Deploying Staging to Production");
+        $alert = "Deploying Staging to Production";
+        $this->alert($alert); SlackApi::message("*$alert*");
 
         $isNewRelease = (!Storage::disk('production')->exists("$hash.sql"));
         $path = config('filesystems.disks.production.root');
@@ -57,29 +57,28 @@ class CreateSnapshot extends Command
         if($isNewRelease){
             $this->stopOnFailure(
                 $this->task("Creating Snapshot $hash from Staging", function() use ($snapshot){
-                    return Bash::script("local", 'snapshots/dump', "staging $snapshot")
-                        ->isSuccessful();
+                    return Bash::script("local", 'snapshots/dump', "staging $snapshot")->isSuccessful();
                 })
             );
-            SlackApi::message("Staging Snapshot Created Successfully.");
+            SlackApi::message("Created Snapshot $hash from Staging Successfully. ($snapshot)");
         }
 
         //Load Production Snapshot into Live Database.
         $this->stopOnFailure(
             $this->task("Loading Snapshot $hash to Production", function() use ($snapshot){
-                return Bash::script("local", 'snapshots/load', "production $snapshot")
-                    ->isSuccessful();
+                return Bash::script("local", 'snapshots/load', "production $snapshot")->isSuccessful();
             })
         );
+        SlackApi::message("Loaded Snapshot $hash to Production Successfully. ($snapshot)");
 
         //Cleaning Up Old Snapshots.
         if($isNewRelease){
             $this->task("Cleaning Up Old Snapshots", function() use ($path){
                 return (
-                    Bash::script("local", 'snapshots/trim', $path)
-                        ->isSuccessful()
+                    Bash::script("local", 'snapshots/trim', $path)->isSuccessful()
                 );
             });
+            SlackApi::message("Old Snapshots Cleaned Up Successfully.");
         }
     }
 
@@ -89,7 +88,9 @@ class CreateSnapshot extends Command
      */
     protected function staging($hash)
     {
-        $this->alert("Creating Staging Database Snapshot");
+        $alert = "Creating Staging Database Snapshot";
+        $this->alert($alert); SlackApi::message("*$alert*");
+
         $path = config('filesystems.disks.staging.root');
         $snapshot = "$path/$hash.sql";
 
@@ -99,16 +100,17 @@ class CreateSnapshot extends Command
         //Create Snapshot for Staging Database.
         $this->stopOnFailure(
             $this->task("Create Snapshot $hash for Staging", function() use ($snapshot){
-                return Bash::script("localhost", 'snapshots/dump', "staging $snapshot")
-                    ->isSuccessful();
+                return Bash::script("localhost", 'snapshots/dump', "staging $snapshot")->isSuccessful();
             })
         );
+        SlackApi::message("Staging Snapshot Created Successfully. ($snapshot)");
 
         //Cleaning Up Old Snapshots.
         $this->task("Cleaning Up Old Snapshots", function() use ($path){
-            return Bash::script("local", 'snapshots/trim', $path)
-                ->isSuccessful();
+            return Bash::script("local", 'snapshots/trim', $path)->isSuccessful();
         });
+
+        SlackApi::message("Old Snapshots Cleaned Up Successfully.");
     }
 
     /**
@@ -117,6 +119,7 @@ class CreateSnapshot extends Command
      */
     protected function stopOnFailure(bool $status){
         if($status === false){
+            SlackApi::message("An error was encountered. Process Aborted.");
             exit;
         }
     }
