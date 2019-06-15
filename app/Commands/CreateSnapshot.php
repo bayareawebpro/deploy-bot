@@ -78,7 +78,7 @@ class CreateSnapshot extends Command
         //Cleaning Up Old Snapshots.
         if ($isNewRelease) {
             if($this->isSuccessful(
-                Bash::script("local", 'snapshots/trim', "$path 8")
+                Bash::script("local", 'snapshots/trim', "$path")
             )){
                 SlackApi::message("Old Snapshots Cleaned Up Successfully.");
             }
@@ -110,7 +110,7 @@ class CreateSnapshot extends Command
 
         //Cleaning Up Old Snapshots.
         if($this->isSuccessful(
-            Bash::script("local", 'snapshots/trim', "$path 8")
+            Bash::script("local", 'snapshots/trim', "$path")
         )){
             SlackApi::message("Old Snapshots Cleaned Up Successfully.");
         }
