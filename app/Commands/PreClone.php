@@ -29,7 +29,7 @@ class PreClone extends Command
      */
     public function handle()
     {
-        SlackApi::message("Command: {$this->signature}...");
+        //deploybot pre:clone "staging" "/home/forge/default/current" "XXX"
 
         $path = $this->argument('path');
         $hash = $this->argument('hash');

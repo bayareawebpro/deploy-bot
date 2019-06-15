@@ -38,6 +38,8 @@ class PostInstall extends Command
         $project = config("envoyer.$env.project");
         $url = config("envoyer.$env.url");
 
+        SlackApi::message("✔ {$this->signature}.");
+
 //        if($this->isSuccessful(
 //            Bash::script("local", 'deploy/assets', $path)
 //        )){

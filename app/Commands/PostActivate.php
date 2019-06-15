@@ -15,13 +15,13 @@ class PostActivate extends Command
      * The signature of the command.
      * @var string
      */
-    protected $signature = 'post:clone {env} {path} {hash}';
+    protected $signature = 'post:activate {env} {path} {hash}';
 
     /**
      * The description of the command.
      * @var string
      */
-    protected $description = 'Post Clone New Release';
+    protected $description = 'Post Activate New Release';
 
     /**
      * Execute the console command.
@@ -36,12 +36,7 @@ class PostActivate extends Command
         $project = config("envoyer.$env.project");
         $url = config("envoyer.$env.url");
 
-        $message = "💪 *Deployment to \"$env\" InProgress!*";
-        $btnText = "Envoyer.io";
-        $btnUrl = "https://envoyer.io/projects/$project";
-
-
-        SlackApi::message($message, $btnText, $btnUrl);
+        SlackApi::message("✔ {$this->signature}.");
     }
 
     /**

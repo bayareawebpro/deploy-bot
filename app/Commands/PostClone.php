@@ -30,7 +30,6 @@ class PostClone extends Command
      */
     public function handle()
     {
-        SlackApi::message("Command: {$this->signature}...");
         //deploybot post:clone "staging" "/home/forge/default/current" "XXX"
 
         $path = $this->argument('path');

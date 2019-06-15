@@ -36,14 +36,7 @@ class PreActivate extends Command
         $project = config("envoyer.$env.project");
         $url = config("envoyer.$env.url");
 
-        $message = "💪 *Deployment to \"$env\" InProgress!*";
-        $btnText = "Envoyer.io";
-        $btnUrl = "https://envoyer.io/projects/$project";
-
-        //Snapshots
-        //Migrate & Seed
-
-        SlackApi::message($message, $btnText, $btnUrl);
+        SlackApi::message("✔ {$this->signature}.");
     }
 
     /**
