@@ -33,6 +33,7 @@ class PostActivate extends Command
         $hash = $this->argument('hash');
         $env = $this->argument('env');
 
+
         SlackApi::message("🛠 Flushing Caches...");
         if($this->isSuccessful(
             Bash::script("local", 'deploy/flush', $path)
@@ -51,6 +52,18 @@ class PostActivate extends Command
         }else{
             SlackApi::message("🤬 Failed to Prime Caches!");
             exit(1);
+        }
+
+        if(in_array($env, ['production'])) {
+            SlackApi::message("🛠 Generating SiteMap...");
+            if ($this->isSuccessful(
+                Bash::script("local", 'deploy/sitemap', $path)
+            )) {
+                SlackApi::message("🧩 SiteMap Generated Successfully.");
+            } else {
+                SlackApi::message("🤬 Failed to Generate SiteMap!");
+                exit(1);
+            }
         }
     }
 
