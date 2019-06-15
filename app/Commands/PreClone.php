@@ -15,7 +15,7 @@ class PreClone extends Command
      * The signature of the command.
      * @var string
      */
-    protected $signature = 'pre:clone {env} {release} {sha}';
+    protected $signature = 'pre:clone {env} {path} {hash}';
 
     /**
      * The description of the command.
@@ -29,14 +29,18 @@ class PreClone extends Command
      */
     public function handle()
     {
-        $release = $this->argument('release');
+        $path = $this->argument('path');
+        $hash = $this->argument('hash');
         $env = $this->argument('env');
-        $sha = $this->argument('sha');
 
         $project = config("envoyer.$env.project");
         $url = config("envoyer.$env.url");
 
-        SlackApi::message("💪 Deploying to $env!", "Envoyer.io", "https://envoyer.io/projects/$project");
+        $message = "💪 *Deployment to \"$env\" InProgress!*";
+        $btnText = "Envoyer.io";
+        $btnUrl = "https://envoyer.io/projects/$project";
+
+        SlackApi::message($message, $btnText, $btnUrl);
     }
 
     /**

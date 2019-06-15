@@ -2,22 +2,26 @@
 
 namespace App\Commands;
 
+use App\Commands\Traits\BashSuccess;
+use App\Services\SlackApi;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
+use App\Services\Bash;
 
 class PostActivate extends Command
 {
+    use BashSuccess;
     /**
      * The signature of the command.
      * @var string
      */
-    protected $signature = 'post:activate {release}';
+    protected $signature = 'post:clone {env} {path} {hash}';
 
     /**
      * The description of the command.
      * @var string
      */
-    protected $description = 'Pre Clone New Release';
+    protected $description = 'Post Clone New Release';
 
     /**
      * Execute the console command.
@@ -25,7 +29,19 @@ class PostActivate extends Command
      */
     public function handle()
     {
-        //
+        $path = $this->argument('path');
+        $hash = $this->argument('hash');
+        $env = $this->argument('env');
+
+        $project = config("envoyer.$env.project");
+        $url = config("envoyer.$env.url");
+
+        $message = "💪 *Deployment to \"$env\" InProgress!*";
+        $btnText = "Envoyer.io";
+        $btnUrl = "https://envoyer.io/projects/$project";
+
+
+        SlackApi::message($message, $btnText, $btnUrl);
     }
 
     /**

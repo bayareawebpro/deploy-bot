@@ -28,9 +28,32 @@ function deploybot(){
 deploybot update
 ```
 
+```
+DeployBot-PreClone
 deploybot pre:clone staging {{ release }} {{ sha }};
-deploybot post:clone staging {{ release }} {{ sha }};
+
+DeployBot-PostClone
+deploybot pre:clone staging {{ release }} {{ sha }};
+
+DeployBot-PreInstall
+deploybot pre:install staging {{ release }} {{ sha }};
+
+DeployBot-PostInstall
+deploybot post:install staging {{ release }} {{ sha }};
+
+DeployBot-PreActivate
+deploybot pre:activate staging {{ release }} {{ sha }};
+
+DeployBot-PostActivate
+deploybot post:activate staging {{ release }} {{ sha }};
+
+DeployBot-PrePurge
+deploybot pre:purge staging {{ release }} {{ sha }};
+
+DeployBot-PostPurge
+deploybot post:purge staging {{ release }} {{ sha }};
 
 
-deploybot pre:clone "staging" "/home/forge/default/current" "XXX"
 deploybot post:clone "staging" "/home/forge/default/current" "XXX"
+
+```
