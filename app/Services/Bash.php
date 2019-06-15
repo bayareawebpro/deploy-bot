@@ -69,7 +69,7 @@ class Bash{
      * @return $this
      */
     protected function run(){
-        $this->process->run(function ($type, $buffer) use (&$processOutput, &$process) {
+        $this->process->run(function ($type, $buffer){
             $this->output->push((object) array(
                 'type' => $type === Process::ERR ? 'error' : 'info',
                 'buffer' => trim($buffer)
@@ -83,7 +83,10 @@ class Bash{
      * @return bool
      */
     public function isSuccessful(){
-        return $this->process->isSuccessful();
+        return (
+            $this->process->isSuccessful() &&
+            $this->output->where('type', 'error')->count() === 0
+        );
     }
 
     /**

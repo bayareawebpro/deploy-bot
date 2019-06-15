@@ -78,7 +78,7 @@ class CreateSnapshot extends Command
         //Cleaning Up Old Snapshots.
         if ($isNewRelease) {
             if($this->isSuccessful(
-                Bash::script("local", 'snapshots/trim', $path)
+                Bash::script("local", 'snapshots/trim', "$path 8")
             )){
                 SlackApi::message("Old Snapshots Cleaned Up Successfully.");
             }
@@ -110,7 +110,7 @@ class CreateSnapshot extends Command
 
         //Cleaning Up Old Snapshots.
         if($this->isSuccessful(
-            Bash::script("local", 'snapshots/trim', $path)
+            Bash::script("local", 'snapshots/trim', "$path 8")
         )){
             SlackApi::message("Old Snapshots Cleaned Up Successfully.");
         }
@@ -126,7 +126,7 @@ class CreateSnapshot extends Command
         $result->output()->each(function ($line) {
             $this->{$line->type}($line->buffer);
         });
-        if (!$result->isSuccessful()) {
+        if ($result->isSuccessful() === false) {
             SlackApi::message("An error was encountered. Process Aborted.");
             exit;
         }
