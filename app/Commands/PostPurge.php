@@ -34,12 +34,10 @@ class PostPurge extends Command
         $hash = $this->argument('hash');
         $env = $this->argument('env');
 
-        $project = config("envoyer.$env.project");
-        $url = config("envoyer.$env.url");
+        SlackApi::message("🗑 Old Releases Purged Successfully!");
 
-        $message = "💪 *Deployment to \"$env\" Completed!*";
-        $btnText = "View Release";
-        SlackApi::message($message, $btnText, config("envoyer.$env.url"));
+        $message = "😎 *Deployment to \"$env\" Completed!*";
+        SlackApi::message($message, "View Release", config("envoyer.$env.url"));
     }
 
     /**

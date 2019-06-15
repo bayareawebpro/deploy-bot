@@ -34,12 +34,7 @@ class PrePurge extends Command
         $hash = $this->argument('hash');
         $env = $this->argument('env');
 
-        $project = config("envoyer.$env.project");
-        $url = config("envoyer.$env.url");
-
-        $message = "💪 *Deployment to \"$env\" Completed!*";
-        $btnText = "View Release";
-        SlackApi::message($message, $btnText, config("envoyer.$env.url"));
+        SlackApi::message("🛠 Purging Old Releases...");
     }
 
     /**
