@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-cd $1 && npm install --quiet --no-progress && npm run prod;
+cd $1 && npm install --silent --no-progress --no-optional && npm run prod;
