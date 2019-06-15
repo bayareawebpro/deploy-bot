@@ -33,10 +33,25 @@ class PostActivate extends Command
         $hash = $this->argument('hash');
         $env = $this->argument('env');
 
-        $project = config("envoyer.$env.project");
-        $url = config("envoyer.$env.url");
+        SlackApi::message("🛠 Flushing Caches...");
+        if($this->isSuccessful(
+            Bash::script("local", 'deploy/flush', $path)
+        )){
+            SlackApi::message("🧩 Caches Flushed Successfully.");
+        }else{
+            SlackApi::message("🤬 Failed to Flush Caches!");
+            exit(1);
+        }
 
-        SlackApi::message("✔ {$this->signature}.");
+        SlackApi::message("🛠 Priming Caches...");
+        if($this->isSuccessful(
+            Bash::script("local", 'deploy/prime', $path)
+        )){
+            SlackApi::message("🧩 Caches Primed Successfully.");
+        }else{
+            SlackApi::message("🤬 Failed to Prime Caches!");
+            exit(1);
+        }
     }
 
     /**
