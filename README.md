@@ -10,12 +10,15 @@ SLACK_USERNAME=DbTool
 SLACK_EMOJI=:robot_face:
 ```
 
-### Run Snapshot Action
+### Update Package Command
+```
+php dbtool update:package
+```
+
+### Snapshot Action Command
 ```
 php /home/forge/dbtool/dbtool snapshots:run staging {{ sha }};
 ```
-
-### Run Snapshot Action
 ```
 php /home/forge/dbtool/dbtool snapshots:run production {{ sha }};
 ```
