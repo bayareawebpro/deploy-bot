@@ -86,9 +86,9 @@ class CreateSnapshot extends Command
             if($this->isSuccessful(
                 Bash::script("local", 'snapshots/trim', "$path")
             )){
-                SlackApi::message("🗑 Old Snapshots Cleaned Up Successfully.");
+                SlackApi::message("🗑 Old Snapshots Purged Up Successfully.");
             }else{
-                SlackApi::message("🤬 Failed to Clean Snapshots!");
+                SlackApi::message("🤬 Failed to Purge Snapshots!");
                 exit(1);
             }
         }
