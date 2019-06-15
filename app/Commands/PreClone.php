@@ -29,11 +29,14 @@ class PreClone extends Command
      */
     public function handle()
     {
-        SlackApi::message("✘ Failed to Create Snapshot!", "Envoyer.io");
-//        BTN="Envoyer.io";
-//        URL="https://envoyer.io/projects/46981";
-//        TEXT="*Staging Deployment In-Progress*";
-//        php /home/forge/dbtool/dbtool notify:slack "$TEXT" "$BTN" "$URL";
+        $release = $this->argument('release');
+        $env = $this->argument('env');
+        $sha = $this->argument('sha');
+
+        $project = config("envoyer.$env.project");
+        $url = config("envoyer.$env.url");
+
+        SlackApi::message("💪 Deploying to $env!", "Envoyer.io", "https://envoyer.io/projects/$project");
     }
 
     /**

@@ -15,17 +15,17 @@ ENVOYER_STAGING_ID=XXX
 ENVOYER_STAGING_URL=https://staging.app.com
 ```
 
-### Update Package Command
-```
-php deploybot update
-```
-
 ### ~/.profile Shortcut
 ```
 # DeployBot
 function deploybot(){
     php ~/deploy-bot/deploybot "$@"
 }
+```
+
+### Update Package Command
+```
+deploybot update
 ```
 
 deploybot pre:clone staging {{ release }} {{ sha }};
