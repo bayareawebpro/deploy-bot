@@ -34,6 +34,19 @@ function deploybot(){
 }
 ```
 
+### Custom Scripts (resources/scripts)
+```
+$bash = Bash::script("local", 'my/script', "my arguments");
+
+$bash->isSuccessful();
+
+$collection = $bash->output();
+
+if($error = $collection->where('type', 'error')->first()){
+    dd($error->buffer);
+}
+```
+
 ### Envoyer Hooks
 Copy these hooks to your envoyer.io project.
 ```
