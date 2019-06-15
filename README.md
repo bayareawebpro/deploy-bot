@@ -10,7 +10,7 @@ Create a fork to customize this code for your deployment workflow.
 #Environment Settings
 SLACK_ENDPOINT=https://hooks.slack.com/services/XXX
 SLACK_CHANNEL=#logger
-SLACK_USERNAME=DbTool
+SLACK_USERNAME=DeployBot
 SLACK_EMOJI=:robot_face:
 
 SNAPSHOTS_PATH=/home/forge/snapshots
@@ -20,8 +20,8 @@ ENVOYER_STAGING_ID=XXX
 ENVOYER_STAGING_URL=https://staging.app.com
 ```
 
-#### Update Command BuiltIn
-Install it un-compiled on your server and run `deploybot update` to pull in your latest changes.
+### Built-In Updater 
+Install it un-compiled on your server and run `deploybot update` to pull in your latest changes and update dependencies.
 ```
 deploybot update
 ```
@@ -48,7 +48,7 @@ if($error = $collection->where('type', 'error')->first()){
 ```
 
 ### Envoyer Hooks
-Copy these hooks to your envoyer.io project.
+Copy these hooks to your envoyer.io project and customize the commands for your needs.
 ```
 #DeployBot-PreClone
 source ~/.profile;
