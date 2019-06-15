@@ -3,11 +3,11 @@
 namespace App\Commands;
 
 use App\Commands\Traits\BashSuccess;
+use App\Services\Bash;
 use App\Services\SlackApi;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Artisan;
 use LaravelZero\Framework\Commands\Command;
-use App\Services\Bash;
-
 class PreActivate extends Command
 {
     use BashSuccess;
@@ -29,14 +29,29 @@ class PreActivate extends Command
      */
     public function handle()
     {
-        $path = $this->argument('path');
-        $hash = $this->argument('hash');
+        //deploybot pre:activate "staging" "/home/forge/default/current" "XXX"
+
         $env = $this->argument('env');
+        $hash= $this->argument('hash');
+        $path= $this->argument('path');
 
-        $project = config("envoyer.$env.project");
-        $url = config("envoyer.$env.url");
+        Artisan::call('snapshots:run', [
+            'hash' => $hash,
+            'env' => $env,
+        ]);
 
-        SlackApi::message("✔ {$this->signature}.");
+        if(in_array($env, ['staging'])){
+            SlackApi::message("🛠 Migrating Database...");
+
+            if($this->isSuccessful(
+                Bash::script("local", 'deploy/migrate', $path)
+            )){
+                SlackApi::message("🧩 Database Migrated Successfully.");
+            }else{
+                SlackApi::message("🤬 Failed to Migrate Database!");
+                exit(1);
+            }
+        }
     }
 
     /**

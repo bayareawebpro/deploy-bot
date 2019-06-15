@@ -48,7 +48,7 @@ class CreateSnapshot extends Command
      */
     protected function production($hash)
     {
-        $this->alert( "Deploying Staging to Production");
+        $this->alert( "Deploying Staging Database to Production");
 
         //Check for Existing Release Snapshot.
         $isNewRelease = (!Storage::disk('production')->exists("$hash.sql"));

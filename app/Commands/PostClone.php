@@ -44,9 +44,9 @@ class PostClone extends Command
         if($this->isSuccessful(
             Bash::script("local", 'deploy/assets', $path)
         )){
-            SlackApi::message("✔ Assets Compiled Successfully.");
+            SlackApi::message("🧩 Assets Compiled Successfully.");
         }else{
-            SlackApi::message("✘ Failed to Compiled Assets!");
+            SlackApi::message("🤬 Failed to Compiled Assets!");
             exit(1);
         }
     }

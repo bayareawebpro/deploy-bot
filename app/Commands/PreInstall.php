@@ -29,7 +29,7 @@ class PreInstall extends Command
      */
     public function handle()
     {
-        //deploybot post:clone "staging" "/home/forge/default/current" "XXX"
+        //deploybot pre:install "staging" "/home/forge/default/current" "XXX"
 
         $path = $this->argument('path');
         $hash = $this->argument('hash');
