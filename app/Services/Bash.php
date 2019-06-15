@@ -50,7 +50,7 @@ class Bash{
      * @param int $timeout
      * @param bool $tty
      */
-    protected function __construct(
+    public function __construct(
         $command,
         int $timeout = 600,
         bool $tty = false
@@ -68,7 +68,7 @@ class Bash{
      * Run Command
      * @return $this
      */
-    protected function run(){
+    public function run(){
         $this->process->run(function ($type, $buffer){
             $this->output->push((object) array(
                 'type' => $type === Process::ERR ? 'error' : 'info',

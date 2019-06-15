@@ -31,11 +31,9 @@ class PostClone extends Command
     public function handle()
     {
         //deploybot post:clone "staging" "/home/forge/default/current" "XXX"
-
         $path = $this->argument('path');
         $hash = $this->argument('hash');
         $env = $this->argument('env');
-
         $project = config("envoyer.$env.project");
         $url = config("envoyer.$env.url");
 
