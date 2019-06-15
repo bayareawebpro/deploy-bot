@@ -11,6 +11,7 @@ use App\Services\Bash;
 class PostClone extends Command
 {
     use BashSuccess;
+
     /**
      * The signature of the command.
      * @var string
@@ -29,6 +30,9 @@ class PostClone extends Command
      */
     public function handle()
     {
+        SlackApi::message("Command: {$this->signature}...");
+        //deploybot post:clone "staging" "/home/forge/default/current" "XXX"
+
         $path = $this->argument('path');
         $hash = $this->argument('hash');
         $env = $this->argument('env');

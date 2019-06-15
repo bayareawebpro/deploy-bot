@@ -33,7 +33,7 @@ DeployBot-PreClone
 deploybot pre:clone staging {{ release }} {{ sha }};
 
 DeployBot-PostClone
-deploybot pre:clone staging {{ release }} {{ sha }};
+deploybot post:clone staging {{ release }} {{ sha }};
 
 DeployBot-PreInstall
 deploybot pre:install staging {{ release }} {{ sha }};

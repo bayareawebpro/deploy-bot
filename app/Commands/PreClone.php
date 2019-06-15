@@ -29,6 +29,8 @@ class PreClone extends Command
      */
     public function handle()
     {
+        SlackApi::message("Command: {$this->signature}...");
+
         $path = $this->argument('path');
         $hash = $this->argument('hash');
         $env = $this->argument('env');
