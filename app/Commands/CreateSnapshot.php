@@ -64,15 +64,15 @@ class CreateSnapshot extends Command
             if($this->isSuccessful(
                 Bash::script("local", 'snapshots/dump', "staging $snapshot")
             )){
-                SlackApi::message("Created Snapshot $hash from Staging Successfully. ($snapshot)");
+                SlackApi::message("✔ Created Snapshot $hash from Staging Successfully. ($snapshot)");
             }
         }
 
-        //Load Production Snapshot into Live Database.
+        //Load Staging Snapshot into Production Database.
         if($this->isSuccessful(
             Bash::script("local", 'snapshots/load', "production $snapshot")
         )){
-            SlackApi::message("Loaded Snapshot $hash to Production Successfully. ($snapshot)");
+            SlackApi::message("✔ Loaded Snapshot $hash to Production Successfully. ($snapshot)");
         }
 
         //Cleaning Up Old Snapshots.
@@ -80,7 +80,7 @@ class CreateSnapshot extends Command
             if($this->isSuccessful(
                 Bash::script("local", 'snapshots/trim', "$path")
             )){
-                SlackApi::message("Old Snapshots Cleaned Up Successfully.");
+                SlackApi::message("✔ Old Snapshots Cleaned Up Successfully.");
             }
         }
     }
@@ -105,14 +105,14 @@ class CreateSnapshot extends Command
         if($this->isSuccessful(
             Bash::script("local", 'snapshots/dump', "staging $snapshot")
         )){
-            SlackApi::message("Staging Snapshot Created Successfully. ($snapshot)");
+            SlackApi::message("✔ Staging Snapshot Created Successfully. ($snapshot)");
         }
 
         //Cleaning Up Old Snapshots.
         if($this->isSuccessful(
             Bash::script("local", 'snapshots/trim', "$path")
         )){
-            SlackApi::message("Old Snapshots Cleaned Up Successfully.");
+            SlackApi::message("✔ Old Snapshots Cleaned Up Successfully.");
         }
     }
 
@@ -126,11 +126,12 @@ class CreateSnapshot extends Command
         $result->output()->each(function ($line) {
             $this->{$line->type}($line->buffer);
         });
-        if ($result->isSuccessful() === false) {
-            SlackApi::message("An error was encountered. Process Aborted.");
+        $successful = $result->isSuccessful();
+        if ($successful === false) {
+            SlackApi::message("✘ An error was encountered. Process Aborted.");
             exit;
         }
-        return $result->isSuccessful();
+        return $successful;
     }
 
     /**
