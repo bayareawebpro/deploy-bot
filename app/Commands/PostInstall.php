@@ -29,7 +29,7 @@ class PostInstall extends Command
      */
     public function handle()
     {
-        //deploybot post:clone "staging" "/home/forge/default/current" "XXX"
+        //deploybot post:install "staging" "/home/forge/default/current" "XXX"
 
         $path = $this->argument('path');
         $hash = $this->argument('hash');
@@ -38,7 +38,7 @@ class PostInstall extends Command
         $project = config("envoyer.$env.project");
         $url = config("envoyer.$env.url");
 
-        SlackApi::message("✔ {$this->signature}.");
+        SlackApi::message("🧩 Dependencies Installed Successfully!");
 
 //        if($this->isSuccessful(
 //            Bash::script("local", 'deploy/assets', $path)

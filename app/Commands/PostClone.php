@@ -39,7 +39,8 @@ class PostClone extends Command
         $project = config("envoyer.$env.project");
         $url = config("envoyer.$env.url");
 
-        SlackApi::message("Compiling Assets...");
+        SlackApi::message("🛠 Compiling Assets...");
+
         if($this->isSuccessful(
             Bash::script("local", 'deploy/assets', $path)
         )){
