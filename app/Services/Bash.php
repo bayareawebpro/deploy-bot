@@ -31,7 +31,7 @@ class Bash{
     public static function script(
         string $host,
         string $script,
-        string $arguments,
+        string $arguments = '',
         int $timeout = 600,
         bool $tty = false
     ){

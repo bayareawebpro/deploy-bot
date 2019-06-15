@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^7.1.3",
-        "ext-curl": "^7.3",
+        "ext-curl": "*",
         "laravel-zero/framework": "5.8.*",
         "zendframework/zend-text": "^2.7"
     },
