@@ -20,6 +20,12 @@ ENVOYER_STAGING_ID=XXX
 ENVOYER_STAGING_URL=https://staging.app.com
 ```
 
+#### Update Command BuiltIn
+Install it un-compiled on your server and run `deploybot update` to pull in your latest changes.
+```
+deploybot update
+```
+
 ### ~/.profile Shortcut
 ```
 # DeployBot
@@ -28,36 +34,38 @@ function deploybot(){
 }
 ```
 
-#### Update Command BuiltIn
-Install it un-compiled on your server and run `deploybot update` to pull in your latest changes.
-
-```
-deploybot update
-```
-
 ### Envoyer Hooks
+Copy these hooks to your envoyer.io project.
 ```
-DeployBot-PreClone
+#DeployBot-PreClone
+source ~/.profile;
 deploybot pre:clone staging {{ release }} {{ sha }};
 
-DeployBot-PostClone
+#DeployBot-PostClone
+source ~/.profile;
 deploybot post:clone staging {{ release }} {{ sha }};
 
-DeployBot-PreInstall
+#DeployBot-PreInstall
+source ~/.profile;
 deploybot pre:install staging {{ release }} {{ sha }};
 
-DeployBot-PostInstall
+#DeployBot-PostInstall
+source ~/.profile;
 deploybot post:install staging {{ release }} {{ sha }};
 
-DeployBot-PreActivate
+#DeployBot-PreActivate
+source ~/.profile;
 deploybot pre:activate staging {{ release }} {{ sha }};
 
-DeployBot-PostActivate
+#DeployBot-PostActivate
+source ~/.profile;
 deploybot post:activate staging {{ release }} {{ sha }};
 
-DeployBot-PrePurge
+#DeployBot-PrePurge
+source ~/.profile;
 deploybot pre:purge staging {{ release }} {{ sha }};
 
-DeployBot-PostPurge
+#DeployBot-PostPurge
+source ~/.profile;
 deploybot post:purge staging {{ release }} {{ sha }};
 ```
