@@ -1,3 +1,2 @@
 #!/usr/bin/env bash
-git pull;
-composer install --no-dev
+git pull && composer update --ansi --no-dev;

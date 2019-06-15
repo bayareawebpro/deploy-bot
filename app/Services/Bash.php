@@ -71,7 +71,7 @@ class Bash{
     protected function run(){
         $this->process->run(function ($type, $buffer) use (&$processOutput, &$process) {
             $this->output->push((object) array(
-                'type' => $type === 'err' ? 'error' : 'info',
+                'type' => $type === Process::ERR ? 'error' : 'info',
                 'buffer' => trim($buffer)
             ));
         });

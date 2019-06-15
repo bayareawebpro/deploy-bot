@@ -29,7 +29,7 @@ class UpdatePackage extends Command
         Bash::script('local', 'updatePackage')
             ->output()
             ->each(function($line){
-                $this->{$line->type}($line->buffer);
+                $this->line($line->buffer);
             });
     }
 
