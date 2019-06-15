@@ -12,7 +12,7 @@ class UpdatePackage extends Command
      * The signature of the command.
      * @var string
      */
-    protected $signature = 'update:package';
+    protected $signature = 'update';
 
     /**
      * The description of the command.
@@ -26,7 +26,8 @@ class UpdatePackage extends Command
      */
     public function handle()
     {
-        Bash::script('local', 'updatePackage')
+        $path = base_path();
+        Bash::script('local', "updatePackage", $path)
             ->output()
             ->each(function($line){
                 $this->line($line->buffer);

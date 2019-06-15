@@ -1,41 +1,36 @@
-# DbTool
-Laravel Zero Database Tool
+# DeployBot
+Laravel Zero Deployment Bot for Envoyer.io
 
 ```
 #Environment Settings
-SNAPSHOTS_PATH=/home/forge/snapshots
 SLACK_ENDPOINT=https://hooks.slack.com/services/XXX
 SLACK_CHANNEL=#logger
 SLACK_USERNAME=DbTool
 SLACK_EMOJI=:robot_face:
+
+SNAPSHOTS_PATH=/home/forge/snapshots
+ENVOYER_PRODUCTION_ID=XXX
+ENVOYER_PRODUCTION_URL=https://app.com
+ENVOYER_STAGING_ID=XXX
+ENVOYER_STAGING_URL=https://staging.app.com
 ```
 
 ### Update Package Command
 ```
-php dbtool update:package
+php deploybot update
 ```
 
-### Snapshot Action Command
+### ~/.profile Shortcut
 ```
-php /home/forge/dbtool/dbtool snapshots:run staging {{ sha }};
-```
-```
-php /home/forge/dbtool/dbtool snapshots:run production {{ sha }};
-```
-
-### Pre Deployment Notification Action
-```
-BTN="Envoyer.io";
-URL="https://envoyer.io/projects/46981";
-TEXT="*Staging Deployment In-Progress*";
-php /home/forge/dbtool/dbtool notify:slack "$TEXT" "$BTN" "$URL";
+# DeployBot
+function deploybot(){
+    php ~/deploy-bot/deploybot "$@"
+}
 ```
 
+deploybot pre:clone staging {{ release }} {{ sha }};
+deploybot post:clone staging {{ release }} {{ sha }};
 
-### Post Deployment Notification Action
-```
-BTN="View Release";
-URL="http://cool.app";
-TEXT="*Staging Deployment Completed Successfully!*";
-php /home/forge/dbtool/dbtool notify:slack "$TEXT" "$BTN" "$URL";
-```
+
+deploybot pre:clone "staging" "/home/forge/default/current" "XXX"
+deploybot post:clone "staging" "/home/forge/default/current" "XXX"

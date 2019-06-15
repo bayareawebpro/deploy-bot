@@ -8,9 +8,11 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use LaravelZero\Framework\Commands\Command;
+use App\Commands\Traits\BashSuccess;
 
 class CreateSnapshot extends Command
 {
+    use BashSuccess;
     /**
      * The signature of the command.
      * @var string
@@ -46,9 +48,7 @@ class CreateSnapshot extends Command
      */
     protected function production($hash)
     {
-        //Alert Users.
-        $alert = "Deploying Staging to Production";
-        $this->alert($alert);
+        $this->alert( "Deploying Staging to Production");
 
         //Check for Existing Release Snapshot.
         $isNewRelease = (!Storage::disk('production')->exists("$hash.sql"));
@@ -100,9 +100,7 @@ class CreateSnapshot extends Command
      */
     protected function staging($hash)
     {
-        //Alert Users.
-        $alert = "Creating Staging Database Snapshot";
-        $this->alert($alert);
+        $this->alert("Creating Staging Database Snapshot");
 
         //Snapshots Directory / Insure Exists.
         $path = $this->makeDirectory(config('filesystems.disks.staging.root'));
@@ -129,19 +127,6 @@ class CreateSnapshot extends Command
             SlackApi::message("✘ Failed to Clean Snapshots!");
             exit(1);
         }
-    }
-
-    /**
-     * Log Bash Results
-     * @param Bash $result
-     * @return bool
-     */
-    protected function isSuccessful(Bash $result)
-    {
-        $result->output()->each(function ($line) {
-            $this->{$line->type}($line->buffer);
-        });
-        return $result->isSuccessful();
     }
 
     /**
