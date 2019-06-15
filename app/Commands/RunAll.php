@@ -38,13 +38,10 @@ class RunAll extends Command
         $steps = [
             'pre:clone',
             'post:clone',
-
             'pre:install',
             'post:install',
-
             'pre:activate',
             'post:activate',
-
             'pre:purge',
             'post:purge',
         ];
