@@ -54,17 +54,17 @@ class PostActivate extends Command
             exit(1);
         }
 
-        if(in_array($env, ['production'])) {
-            SlackApi::message("🛠 Generating SiteMap...");
-            if ($this->isSuccessful(
-                Bash::script("local", 'deploy/sitemap', $path)
-            )) {
-                SlackApi::message("🧩 SiteMap Generated Successfully.");
-            } else {
-                SlackApi::message("🤬 Failed to Generate SiteMap!");
-                exit(1);
-            }
-        }
+//        if(in_array($env, ['production'])) {
+//            SlackApi::message("🛠 Generating SiteMap...");
+//            if ($this->isSuccessful(
+//                Bash::script("local", 'deploy/sitemap', $path)
+//            )) {
+//                SlackApi::message("🧩 SiteMap Generated Successfully.");
+//            } else {
+//                SlackApi::message("🤬 Failed to Generate SiteMap!");
+//                exit(1);
+//            }
+//        }
     }
 
     /**
