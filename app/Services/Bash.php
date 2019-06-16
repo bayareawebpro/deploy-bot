@@ -53,12 +53,12 @@ class Bash{
     public function __construct(
         $command,
         int $timeout = 600,
-        bool $tty = null
+        bool $tty = false
     ){
         $this->output = new Collection;
         $this->process = Process::fromShellCommandline($command);
         $this->process->setTimeout($timeout);
-        $this->process->setTty(Process::isTtySupported());
+        $this->process->setTty($tty);
         $this->process->setEnv(array(
             "PATH" => implode(':', config('bash.path', []))
         ));

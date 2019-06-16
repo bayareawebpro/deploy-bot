@@ -51,34 +51,26 @@ if($error = $collection->where('type', 'error')->first()){
 Copy these hooks to your envoyer.io project and customize the commands for your needs.
 ```
 #DeployBot-PreClone
-source ~/.profile;
-deploybot pre:clone staging {{ release }} {{ sha }};
+php ~/deploy-bot/deploybot pre:clone staging {{ release }} {{ sha }};
 
 #DeployBot-PostClone
-source ~/.profile;
-deploybot post:clone staging {{ release }} {{ sha }};
+php ~/deploy-bot/deploybot post:clone staging {{ release }} {{ sha }};
 
 #DeployBot-PreInstall
-source ~/.profile;
-deploybot pre:install staging {{ release }} {{ sha }};
+php ~/deploy-bot/deploybot pre:install staging {{ release }} {{ sha }};
 
 #DeployBot-PostInstall
-source ~/.profile;
-deploybot post:install staging {{ release }} {{ sha }};
+php ~/deploy-bot/deploybot post:install staging {{ release }} {{ sha }};
 
 #DeployBot-PreActivate
-source ~/.profile;
-deploybot pre:activate staging {{ release }} {{ sha }};
+php ~/deploy-bot/deploybot pre:activate staging {{ release }} {{ sha }};
 
 #DeployBot-PostActivate
-source ~/.profile;
-deploybot post:activate staging {{ release }} {{ sha }};
+php ~/deploy-bot/deploybot post:activate staging {{ release }} {{ sha }};
 
 #DeployBot-PrePurge
-source ~/.profile;
-deploybot pre:purge staging {{ release }} {{ sha }};
+php ~/deploy-bot/deploybot pre:purge staging {{ release }} {{ sha }};
 
 #DeployBot-PostPurge
-source ~/.profile;
-deploybot post:purge staging {{ release }} {{ sha }};
+php ~/deploy-bot/deploybot post:purge staging {{ release }} {{ sha }};
 ```
