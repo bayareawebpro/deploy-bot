@@ -16,8 +16,11 @@ SLACK_EMOJI=:robot_face:
 SNAPSHOTS_PATH=/home/forge/snapshots
 ENVOYER_PRODUCTION_ID=XXX
 ENVOYER_PRODUCTION_URL=https://app.com
+ENVOYER_PRODUCTION_DATABASE=production
+
 ENVOYER_STAGING_ID=XXX
 ENVOYER_STAGING_URL=https://staging.app.com
+ENVOYER_STAGING_DATABASE=staging
 ```
 
 ### Built-In Updater 
