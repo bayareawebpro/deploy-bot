@@ -39,6 +39,8 @@ class CreateSnapshot extends Command
         $env = $this->argument('env');
         if (method_exists($this, $env)) {
             $this->$env($this->argument('hash'));
+        }else{
+            $this->error("Env: $env method does not exist.  Snapshots failed.");
         }
     }
 

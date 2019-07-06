@@ -35,6 +35,8 @@ class PreActivate extends Command
         $hash= $this->argument('hash');
         $path= $this->argument('path');
 
+        Bash::script("local", 'status/down', $path);
+
         Artisan::call('snapshots:run', [
             'hash' => $hash,
             'env' => $env,
@@ -51,6 +53,8 @@ class PreActivate extends Command
                 exit(1);
             }
         }
+
+        Bash::script("local", 'status/up', $path);
     }
 
     /**
