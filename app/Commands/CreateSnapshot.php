@@ -59,10 +59,13 @@ class CreateSnapshot extends Command
         //Current Snapshot Path.
         $snapshot = "$path/$hash.sql";
 
+        $stagDatabase = config('envoyer.staging.database', 'staging');
+        $prodDatabase = config('envoyer.production.database', 'production');
+
         //Create Production Snapshot from Staging Database.
         if ($isNewRelease) {
             if($this->isSuccessful(
-                Bash::script("local", 'snapshots/dump', "staging $snapshot")
+                Bash::script("local", 'snapshots/dump', "$stagDatabase $snapshot")
             )){
                 SlackApi::message("📸 Created Snapshot $hash from Staging Successfully. ($snapshot)");
             }else{
@@ -73,7 +76,7 @@ class CreateSnapshot extends Command
 
         //Load Staging Snapshot into Production Database.
         if($this->isSuccessful(
-            Bash::script("local", 'snapshots/load', "production $snapshot")
+            Bash::script("local", 'snapshots/load', "$prodDatabase $snapshot")
         )){
             SlackApi::message("🧩 Loaded Snapshot $hash to Production Successfully. ($snapshot)");
         }else{
