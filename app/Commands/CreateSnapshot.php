@@ -114,13 +114,14 @@ class CreateSnapshot extends Command
         $snapshot = "$path/$hash.sql";
 
         if(!Storage::disk('staging')->exists("$hash.sql")){
+            $stagDatabase = config('envoyer.staging.database', 'staging');
             //Create Snapshot for Staging Database.
             if($this->isSuccessful(
-                Bash::script("local", 'snapshots/dump', "staging $snapshot")
+                Bash::script("local", 'snapshots/dump', "$stagDatabase $snapshot")
             )){
                 SlackApi::message("📸 Staging Snapshot Created Successfully. ($snapshot)");
             }else{
-                SlackApi::message("🤬 Failed to Create Snapshot!");
+                SlackApi::message("🤬 Failed to Create Snapshot! ($snapshot)");
                 exit(1);
             }
         }else{
