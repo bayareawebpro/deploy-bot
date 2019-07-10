@@ -113,14 +113,18 @@ class CreateSnapshot extends Command
         //Current Snapshot Path.
         $snapshot = "$path/$hash.sql";
 
-        //Create Snapshot for Staging Database.
-        if($this->isSuccessful(
-            Bash::script("local", 'snapshots/dump', "staging $snapshot")
-        )){
-            SlackApi::message("📸 Staging Snapshot Created Successfully. ($snapshot)");
+        if(!Storage::disk('staging')->exists("$hash.sql")){
+            //Create Snapshot for Staging Database.
+            if($this->isSuccessful(
+                Bash::script("local", 'snapshots/dump', "staging $snapshot")
+            )){
+                SlackApi::message("📸 Staging Snapshot Created Successfully. ($snapshot)");
+            }else{
+                SlackApi::message("🤬 Failed to Create Snapshot!");
+                exit(1);
+            }
         }else{
-            SlackApi::message("🤬 Failed to Create Snapshot!");
-            exit(1);
+            SlackApi::message("📸 Staging Snapshot Already Exists. ($snapshot)");
         }
 
         //Cleaning Up Old Snapshots.
