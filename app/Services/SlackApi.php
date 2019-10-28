@@ -37,7 +37,7 @@ class SlackApi
                 ],
             ]);
         }
-        static::send($message);
+        //static::send($message);
     }
 
     /**

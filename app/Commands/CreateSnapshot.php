@@ -72,7 +72,7 @@ class CreateSnapshot extends Command
                 SlackApi::message("📸 Created Snapshot $hash from Staging Successfully. ($snapshot)");
             }else{
                 SlackApi::message("✘ Failed to Create Snapshot!");
-                exit(1);
+                abort(1);
             }
         }
 
@@ -83,7 +83,7 @@ class CreateSnapshot extends Command
             SlackApi::message("🧩 Loaded Snapshot $hash to Production Successfully. ($snapshot)");
         }else{
             SlackApi::message("🤬 Failed to Load Snapshot!");
-            exit(1);
+            abort(1);
         }
 
         //Cleaning Up Old Snapshots.
@@ -94,7 +94,7 @@ class CreateSnapshot extends Command
                 SlackApi::message("🗑 Old Snapshots Purged Up Successfully.");
             }else{
                 SlackApi::message("🤬 Failed to Purge Snapshots!");
-                exit(1);
+                abort(1);
             }
         }
     }
@@ -122,7 +122,7 @@ class CreateSnapshot extends Command
                 SlackApi::message("📸 Staging Snapshot Created Successfully. ($snapshot)");
             }else{
                 SlackApi::message("🤬 Failed to Create Snapshot! ($snapshot)");
-                exit(1);
+                abort(1);
             }
         }else{
             SlackApi::message("📸 Staging Snapshot Already Exists. ($snapshot)");
@@ -135,7 +135,7 @@ class CreateSnapshot extends Command
             SlackApi::message("🗑 Old Snapshots Cleaned Up Successfully.");
         }else{
             SlackApi::message("🤬 Failed to Clean Snapshots!");
-            exit(1);
+            abort(1);
         }
     }
 

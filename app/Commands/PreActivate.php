@@ -29,7 +29,7 @@ class PreActivate extends Command
      */
     public function handle()
     {
-        //deploybot pre:activate "staging" "/home/forge/default/current" "XXX"
+        //php deploybot pre:activate "staging" "/home/forge/default/current" "XXX"
 
         $env = $this->argument('env');
         $hash= $this->argument('hash');
@@ -50,7 +50,7 @@ class PreActivate extends Command
                 SlackApi::message("🧩 Database Migrated Successfully.");
             }else{
                 SlackApi::message("🤬 Failed to Migrate Database!");
-                exit(1);
+                abort(1);
             }
         }
 

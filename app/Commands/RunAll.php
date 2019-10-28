@@ -31,7 +31,7 @@ class RunAll extends Command
     {
         $release = [
             'env' => 'staging',
-            'path' => '/home/forge/default/current',
+            'path' => '/Users/builder/Sites/test-project',
             'hash' => Str::random(12),
         ];
 
@@ -48,12 +48,12 @@ class RunAll extends Command
 
         foreach ($steps as $step){
             Artisan::call($step, $release);
+            $this->info(Artisan::output());
         }
     }
 
     /**
      * Define the command's schedule.
-     *
      * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */

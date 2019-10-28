@@ -41,7 +41,7 @@ class PostActivate extends Command
             SlackApi::message("🗑 Caches Flushed Successfully.");
         }else{
             SlackApi::message("🤬 Failed to Flush Caches!");
-            exit(1);
+            abort(1);
         }
 
         SlackApi::message("🛠 Priming Caches...");
@@ -51,7 +51,7 @@ class PostActivate extends Command
             SlackApi::message("🧩 Caches Primed Successfully.");
         }else{
             SlackApi::message("🤬 Failed to Prime Caches!");
-            exit(1);
+            abort(1);
         }
 
         if(in_array($env, ['production'])) {
@@ -62,7 +62,7 @@ class PostActivate extends Command
                 SlackApi::message("🧩 SiteMap Generated Successfully.");
             } else {
                 SlackApi::message("🤬 Failed to Generate SiteMap!");
-                exit(1);
+                abort(1);
             }
         }
     }
