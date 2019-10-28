@@ -26,8 +26,7 @@ class UpdatePackage extends Command
      */
     public function handle()
     {
-        $path = base_path();
-        Bash::script('local', "updatePackage", $path)
+        Bash::script('local', "updatePackage", base_path())
             ->output()
             ->each(function($line){
                 $this->line($line->buffer);

@@ -4,11 +4,11 @@ namespace App\Commands;
 
 use App\Services\Bash;
 use App\Services\SlackApi;
-use Illuminate\Console\Scheduling\Schedule;
+use App\Commands\Traits\BashSuccess;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use App\Commands\Traits\BashSuccess;
 
 class CreateSnapshot extends Command
 {
