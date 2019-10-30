@@ -39,7 +39,7 @@ function deploybot(){
 
 ### Custom Scripts (resources/scripts)
 ```
-$bash = Bash::script("local", 'my/script', "my arguments");
+$bash = Bash::script('my/script', "arg1 arg2");
 
 $bash->isSuccessful();
 
