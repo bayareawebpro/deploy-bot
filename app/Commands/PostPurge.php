@@ -34,7 +34,7 @@ class PostPurge extends Command
         $hash = $this->argument('hash');
         $env = $this->argument('env');
         $this->notify("🗑 Old Releases Purged Successfully!");
-        $this->notify("😎 *Deployment Completed: \"$env\" !*");
+        $this->notify("😎 Deployment Completed: \"$env\" !");
     }
 
     /**

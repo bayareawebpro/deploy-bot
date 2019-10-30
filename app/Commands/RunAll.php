@@ -17,14 +17,12 @@ class RunAll extends Command
 
     /**
      * The description of the command.
-     *
      * @var string
      */
     protected $description = 'Run All Deployment Commands';
 
     /**
      * Execute the console command.
-     *
      * @return mixed
      */
     public function handle()
@@ -36,10 +34,10 @@ class RunAll extends Command
         ];
 
         $steps = [
-            //'pre:clone', //√
-            //'post:clone', //√
-            //'pre:install', //√
-            //'post:install', //√
+            'pre:clone',
+            'post:clone',
+            'pre:install',
+            'post:install',
             'pre:activate',
             'post:activate',
             'pre:purge',
@@ -48,8 +46,7 @@ class RunAll extends Command
 
         foreach ($steps as $step){
             $this->alert($step);
-            Artisan::call($step, $release);
-            $this->line(Artisan::output());
+            $this->call($step, $release);
         }
     }
 

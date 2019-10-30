@@ -31,45 +31,59 @@ class PostActivate extends Command
         $path = $this->argument('path');
         $hash = $this->argument('hash');
         $env = $this->argument('env');
+        $this->cacheFlush($path);
+        $this->cachePrime($path);
+        $this->sitemapGenerate($env, $path);
+    }
 
+    /**
+     * cache Flush
+     * @param $path
+     */
+    protected function cacheFlush($path): void
+    {
         $this->notify("🛠 Flushing Caches...");
-
-        if($this->isSuccessful(
-            Bash::script("local", 'deploy/flush', $path)
-        )){
+        if ($this->isSuccessful(
+            Bash::script('deploy/flush', $path)
+        )) {
             $this->notify("🗑 Caches Flushed Successfully.");
-        }else{
+        } else {
             $this->error("🤬 Failed to Flush Caches!");
         }
+    }
 
+    /**
+     * cache Prime
+     * @param $path
+     */
+    protected function cachePrime($path): void
+    {
         $this->notify("🛠 Priming Caches...");
-        if($this->isSuccessful(
-            Bash::script("local", 'deploy/prime', $path)
-        )){
+        if ($this->isSuccessful(
+            Bash::script('deploy/prime', $path)
+        )) {
             $this->notify("🧩 Caches Primed Successfully.");
-        }else{
+        } else {
             $this->error("🤬 Failed to Prime Caches!");
         }
+    }
 
-        if(in_array($env, ['production'])) {
+    /**
+     * sitemap Generate
+     * @param $env
+     * @param $path
+     */
+    protected function sitemapGenerate($env, $path): void
+    {
+        if (in_array($env, ['production'])) {
             $this->notify("🛠 Generating SiteMap...");
             if ($this->isSuccessful(
-                Bash::script("local", 'deploy/sitemap', $path)
+                Bash::script('deploy/sitemap', $path)
             )) {
                 $this->notify("🧩 SiteMap Generated Successfully.");
             } else {
                 $this->error("🤬 Failed to Generate SiteMap!");
             }
         }
-    }
-
-    /**
-     * Define the command's schedule.
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
     }
 }

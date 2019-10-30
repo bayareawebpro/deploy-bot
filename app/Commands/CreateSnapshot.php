@@ -67,7 +67,7 @@ class CreateSnapshot extends Command
         //Create Production Snapshot from Staging Database.
         if ($isNewRelease) {
             if($this->isSuccessful(
-                Bash::script("local", 'snapshots/dump', "$stagDatabase $snapshot")
+                Bash::script('snapshots/dump', "$stagDatabase $snapshot")
             )){
                 $this->notify("📸 Created Snapshot $hash from Staging Successfully. ($snapshot)");
             }else{
@@ -77,7 +77,7 @@ class CreateSnapshot extends Command
 
         //Load Staging Snapshot into Production Database.
         if($this->isSuccessful(
-            Bash::script("local", 'snapshots/load', "$prodDatabase $snapshot")
+            Bash::script('snapshots/load', "$prodDatabase $snapshot")
         )){
             $this->notify("🧩 Loaded Snapshot $hash to Production Successfully. ($snapshot)");
         }else{
@@ -87,7 +87,7 @@ class CreateSnapshot extends Command
         //Cleaning Up Old Snapshots.
         if ($isNewRelease) {
             if($this->isSuccessful(
-                Bash::script("local", 'snapshots/trim', "$path")
+                Bash::script('snapshots/trim', "$path")
             )){
                 $this->notify("🗑 Old Snapshots Purged Up Successfully.");
             }else{
@@ -114,7 +114,7 @@ class CreateSnapshot extends Command
             $stagDatabase = config('envoyer.staging.database', 'staging');
             //Create Snapshot for Staging Database.
             if($this->isSuccessful(
-                Bash::script("local", 'snapshots/dump', "$stagDatabase $snapshot")
+                Bash::script('snapshots/dump', "$stagDatabase $snapshot")
             )){
                 $this->notify("📸 Staging Snapshot Created Successfully. ($snapshot)");
             }else{
@@ -126,7 +126,7 @@ class CreateSnapshot extends Command
 
         //Cleaning Up Old Snapshots.
         if($this->isSuccessful(
-            Bash::script("local", 'snapshots/trim', "$path")
+            Bash::script('snapshots/trim', "$path")
         )){
             $this->notify("🗑 Old Snapshots Cleaned Up Successfully.");
         }else{

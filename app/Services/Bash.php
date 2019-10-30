@@ -21,44 +21,24 @@ class Bash{
 
     /**
      * Script On Host
-     * @param string $host
      * @param string $script
      * @param string $arguments
-     * @param int $timeout
-     * @param bool $tty
      * @return $this
      */
-    public static function script(
-        string $host,
-        string $script,
-        string $arguments = '',
-        int $timeout = 600,
-        bool $tty = false
-    ){
+    public static function script(string $script, string $arguments = ''){
         $script = resource_path("scripts/$script.sh");
-        if(in_array($host,['local', 'localhost'])){
-            $command = "/usr/bin/env bash {$script} {$arguments}";
-        }else{
-            $command = "ssh {$host} \"bash -s\" < {$script} {$arguments}";
-        }
-        return (new self($command, $timeout, $tty))->run();
+        return (new self("/usr/bin/env bash {$script} {$arguments}"))->run();
     }
 
     /**
      * Run Command
      * @param string|array $command
-     * @param int $timeout
-     * @param bool $tty
      */
-    public function __construct(
-        $command,
-        int $timeout = 600,
-        bool $tty = false
-    ){
+    public function __construct($command){
         $this->output = new Collection;
         $this->process = Process::fromShellCommandline($command);
-        $this->process->setTimeout($timeout);
-        $this->process->setTty($tty);
+        $this->process->setTimeout(600);
+        $this->process->setTty(false);
         $this->process->enableOutput();
         $this->process->setEnv(array(
             "PATH" => implode(':', config('bash.path', []))

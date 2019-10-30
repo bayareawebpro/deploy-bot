@@ -35,7 +35,7 @@ class PreActivate extends Command
         $hash= $this->argument('hash');
         $path= $this->argument('path');
 
-        Bash::script("local", 'status/down', $path);
+        Bash::script('status/down', $path);
 
         Artisan::call('snapshots:run', [
             'hash' => $hash,
@@ -45,7 +45,7 @@ class PreActivate extends Command
         if(in_array($env, ['staging'])){
             $this->notify("🛠 Migrating Database...");
             if($this->isSuccessful(
-                Bash::script("local", 'deploy/migrate', $path)
+                Bash::script('deploy/migrate', $path)
             )){
                 $this->notify("🧩 Database Migrated Successfully.");
             }else{
@@ -53,7 +53,7 @@ class PreActivate extends Command
             }
         }
 
-        Bash::script("local", 'status/up', $path);
+        Bash::script('status/up', $path);
     }
 
     /**

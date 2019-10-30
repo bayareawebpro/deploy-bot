@@ -37,7 +37,7 @@ class PostInstall extends Command
         $this->notify("🧩 Dependencies Installed Successfully!");
         $this->notify("🛠 Compiling Assets...");
 
-        if($this->isSuccessful(Bash::script("local", 'deploy/assets', $path))){
+        if($this->isSuccessful(Bash::script('deploy/assets', $path))){
             $this->notify("🧩 Assets Compiled Successfully.");
         }else{
             $this->error("🤬 Failed to Compile Assets!");
