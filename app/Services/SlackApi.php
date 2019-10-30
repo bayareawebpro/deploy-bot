@@ -46,14 +46,18 @@ class SlackApi
      */
     protected static function send(array $data)
     {
-        $ch = curl_init(config('slack.endpoint'));
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-        ]);
-        curl_exec($ch);
-        curl_close($ch);
+        try{
+            $ch = curl_init(config('slack.endpoint'));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+            ]);
+            curl_exec($ch);
+            curl_close($ch);
+        }catch (\Exception $exception){
+            logger($exception);
+        }
     }
 }

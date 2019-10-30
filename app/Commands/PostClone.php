@@ -2,15 +2,13 @@
 
 namespace App\Commands;
 
-use App\Commands\Traits\BashSuccess;
-use App\Services\SlackApi;
+use App\Commands\Traits\CommandNotifier;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use App\Services\Bash;
 
 class PostClone extends Command
 {
-    use BashSuccess;
+    use CommandNotifier;
 
     /**
      * The signature of the command.
@@ -22,7 +20,7 @@ class PostClone extends Command
      * The description of the command.
      * @var string
      */
-    protected $description = 'Post Clone New Release';
+    protected $description = '2) Post Clone New Release';
 
     /**
      * Execute the console command.
@@ -36,8 +34,7 @@ class PostClone extends Command
         $env = $this->argument('env');
         $project = config("envoyer.$env.project");
         $url = config("envoyer.$env.url");
-
-        SlackApi::message("🧩 Repository Cloned Successfully.");
+        $this->notify("🧩 Repository Cloned Successfully.");
     }
 
     /**

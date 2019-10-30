@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 
-use App\Commands\Traits\BashSuccess;
+use App\Commands\Traits\CommandNotifier;
 use App\Services\SlackApi;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Artisan;
@@ -11,7 +11,7 @@ use App\Services\Bash;
 
 class PostInstall extends Command
 {
-    use BashSuccess;
+    use CommandNotifier;
     /**
      * The signature of the command.
      * @var string
@@ -22,7 +22,7 @@ class PostInstall extends Command
      * The description of the command.
      * @var string
      */
-    protected $description = 'Post Install New Release';
+    protected $description = '4) Post Install New Release';
 
     /**
      * Execute the console command.
@@ -34,16 +34,13 @@ class PostInstall extends Command
         $hash = $this->argument('hash');
         $env = $this->argument('env');
 
-        SlackApi::message("🧩 Dependencies Installed Successfully!");
+        $this->notify("🧩 Dependencies Installed Successfully!");
+        $this->notify("🛠 Compiling Assets...");
 
-        SlackApi::message("🛠 Compiling Assets...");
-        if($this->isSuccessful(
-            Bash::script("local", 'deploy/assets', $path)
-        )){
-            SlackApi::message("🧩 Assets Compiled Successfully.");
+        if($this->isSuccessful(Bash::script("local", 'deploy/assets', $path))){
+            $this->notify("🧩 Assets Compiled Successfully.");
         }else{
-            SlackApi::message("🤬 Failed to Compile Assets!");
-            abort(1);
+            $this->error("🤬 Failed to Compile Assets!");
         }
     }
 

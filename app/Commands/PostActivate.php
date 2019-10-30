@@ -2,15 +2,14 @@
 
 namespace App\Commands;
 
-use App\Commands\Traits\BashSuccess;
-use App\Services\SlackApi;
+use App\Services\Bash;
+use App\Commands\Traits\CommandNotifier;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use App\Services\Bash;
 
 class PostActivate extends Command
 {
-    use BashSuccess;
+    use CommandNotifier;
     /**
      * The signature of the command.
      * @var string
@@ -21,7 +20,7 @@ class PostActivate extends Command
      * The description of the command.
      * @var string
      */
-    protected $description = 'Post Activate New Release';
+    protected $description = '6) Post Activate New Release';
 
     /**
      * Execute the console command.
@@ -33,36 +32,33 @@ class PostActivate extends Command
         $hash = $this->argument('hash');
         $env = $this->argument('env');
 
+        $this->notify("🛠 Flushing Caches...");
 
-        SlackApi::message("🛠 Flushing Caches...");
         if($this->isSuccessful(
             Bash::script("local", 'deploy/flush', $path)
         )){
-            SlackApi::message("🗑 Caches Flushed Successfully.");
+            $this->notify("🗑 Caches Flushed Successfully.");
         }else{
-            SlackApi::message("🤬 Failed to Flush Caches!");
-            abort(1);
+            $this->error("🤬 Failed to Flush Caches!");
         }
 
-        SlackApi::message("🛠 Priming Caches...");
+        $this->notify("🛠 Priming Caches...");
         if($this->isSuccessful(
             Bash::script("local", 'deploy/prime', $path)
         )){
-            SlackApi::message("🧩 Caches Primed Successfully.");
+            $this->notify("🧩 Caches Primed Successfully.");
         }else{
-            SlackApi::message("🤬 Failed to Prime Caches!");
-            abort(1);
+            $this->error("🤬 Failed to Prime Caches!");
         }
 
         if(in_array($env, ['production'])) {
-            SlackApi::message("🛠 Generating SiteMap...");
+            $this->notify("🛠 Generating SiteMap...");
             if ($this->isSuccessful(
                 Bash::script("local", 'deploy/sitemap', $path)
             )) {
-                SlackApi::message("🧩 SiteMap Generated Successfully.");
+                $this->notify("🧩 SiteMap Generated Successfully.");
             } else {
-                SlackApi::message("🤬 Failed to Generate SiteMap!");
-                abort(1);
+                $this->error("🤬 Failed to Generate SiteMap!");
             }
         }
     }

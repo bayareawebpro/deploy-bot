@@ -3,13 +3,13 @@
 namespace App\Commands;
 
 use App\Services\SlackApi;
-use App\Commands\Traits\BashSuccess;
+use App\Commands\Traits\CommandNotifier;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
 class PreClone extends Command
 {
-    use BashSuccess;
+    use CommandNotifier;
     /**
      * The signature of the command.
      * @var string
@@ -20,7 +20,7 @@ class PreClone extends Command
      * The description of the command.
      * @var string
      */
-    protected $description = 'Pre Clone New Release';
+    protected $description = '1) Pre Clone New Release';
 
     /**
      * Execute the console command.
@@ -32,14 +32,8 @@ class PreClone extends Command
         $path = $this->argument('path');
         $hash = $this->argument('hash');
         $env = $this->argument('env');
-
-        $project = config("envoyer.$env.project");
-
-        $message = "💪 *Deployment to \"$env\" InProgress!*";
-        $btnUrl = "https://envoyer.io/projects/$project";
-        $btnText = "Envoyer.io";
-        SlackApi::message($message, $btnText, $btnUrl);
-        SlackApi::message("🌎 Downloading Code Repository...");
+        $this->notify("💪 Deployment to \"$env\" InProgress!");
+        $this->notify("🌎 Downloading Code Repository...");
     }
 
     /**

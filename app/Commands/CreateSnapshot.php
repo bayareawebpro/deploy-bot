@@ -3,16 +3,16 @@
 namespace App\Commands;
 
 use App\Services\Bash;
-use App\Services\SlackApi;
-use App\Commands\Traits\BashSuccess;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use App\Commands\Traits\CommandNotifier;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
 class CreateSnapshot extends Command
 {
-    use BashSuccess;
+    use CommandNotifier;
+
     /**
      * The signature of the command.
      * @var string
@@ -69,10 +69,9 @@ class CreateSnapshot extends Command
             if($this->isSuccessful(
                 Bash::script("local", 'snapshots/dump', "$stagDatabase $snapshot")
             )){
-                SlackApi::message("📸 Created Snapshot $hash from Staging Successfully. ($snapshot)");
+                $this->notify("📸 Created Snapshot $hash from Staging Successfully. ($snapshot)");
             }else{
-                SlackApi::message("✘ Failed to Create Snapshot!");
-                abort(1);
+                $this->error("🤬 Failed to Create Snapshot!");
             }
         }
 
@@ -80,10 +79,9 @@ class CreateSnapshot extends Command
         if($this->isSuccessful(
             Bash::script("local", 'snapshots/load', "$prodDatabase $snapshot")
         )){
-            SlackApi::message("🧩 Loaded Snapshot $hash to Production Successfully. ($snapshot)");
+            $this->notify("🧩 Loaded Snapshot $hash to Production Successfully. ($snapshot)");
         }else{
-            SlackApi::message("🤬 Failed to Load Snapshot!");
-            abort(1);
+            $this->error("🤬 Failed to Load Snapshot!");
         }
 
         //Cleaning Up Old Snapshots.
@@ -91,10 +89,9 @@ class CreateSnapshot extends Command
             if($this->isSuccessful(
                 Bash::script("local", 'snapshots/trim', "$path")
             )){
-                SlackApi::message("🗑 Old Snapshots Purged Up Successfully.");
+                $this->notify("🗑 Old Snapshots Purged Up Successfully.");
             }else{
-                SlackApi::message("🤬 Failed to Purge Snapshots!");
-                abort(1);
+                $this->error("🤬 Failed to Purge Snapshots!");
             }
         }
     }
@@ -119,23 +116,21 @@ class CreateSnapshot extends Command
             if($this->isSuccessful(
                 Bash::script("local", 'snapshots/dump', "$stagDatabase $snapshot")
             )){
-                SlackApi::message("📸 Staging Snapshot Created Successfully. ($snapshot)");
+                $this->notify("📸 Staging Snapshot Created Successfully. ($snapshot)");
             }else{
-                SlackApi::message("🤬 Failed to Create Snapshot! ($snapshot)");
-                abort(1);
+                $this->error("🤬 Failed to Create Snapshot! ($snapshot)");
             }
         }else{
-            SlackApi::message("📸 Staging Snapshot Already Exists. ($snapshot)");
+            $this->notify("📸 Staging Snapshot Already Exists. ($snapshot)");
         }
 
         //Cleaning Up Old Snapshots.
         if($this->isSuccessful(
             Bash::script("local", 'snapshots/trim', "$path")
         )){
-            SlackApi::message("🗑 Old Snapshots Cleaned Up Successfully.");
+            $this->notify("🗑 Old Snapshots Cleaned Up Successfully.");
         }else{
-            SlackApi::message("🤬 Failed to Clean Snapshots!");
-            abort(1);
+            $this->error("🤬 Failed to Clean Snapshots!");
         }
     }
 

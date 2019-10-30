@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 
-use App\Commands\Traits\BashSuccess;
+use App\Commands\Traits\CommandNotifier;
 use App\Services\Bash;
 use App\Services\SlackApi;
 use Illuminate\Console\Scheduling\Schedule;
@@ -10,7 +10,7 @@ use LaravelZero\Framework\Commands\Command;
 
 class PrePurge extends Command
 {
-    use BashSuccess;
+    use CommandNotifier;
 
     /**
      * The signature of the command.
@@ -22,7 +22,7 @@ class PrePurge extends Command
      * The description of the command.
      * @var string
      */
-    protected $description = 'Pre Purge Old Releases';
+    protected $description = '7) Pre Purge Old Releases';
 
     /**
      * Execute the console command.
@@ -34,7 +34,7 @@ class PrePurge extends Command
         $hash = $this->argument('hash');
         $env = $this->argument('env');
 
-        SlackApi::message("🛠 Purging Old Releases...");
+        $this->notify("🛠 Purging Old Releases...");
     }
 
     /**

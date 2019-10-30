@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 
-use App\Commands\Traits\BashSuccess;
+use App\Commands\Traits\CommandNotifier;
 use App\Services\Bash;
 use App\Services\SlackApi;
 use Illuminate\Console\Scheduling\Schedule;
@@ -10,7 +10,7 @@ use LaravelZero\Framework\Commands\Command;
 
 class PostPurge extends Command
 {
-    use BashSuccess;
+    use CommandNotifier;
 
     /**
      * The signature of the command.
@@ -22,7 +22,7 @@ class PostPurge extends Command
      * The description of the command.
      * @var string
      */
-    protected $description = 'Post Purge Old Releases';
+    protected $description = '8) Post Purge Old Releases';
 
     /**
      * Execute the console command.
@@ -33,11 +33,8 @@ class PostPurge extends Command
         $path = $this->argument('path');
         $hash = $this->argument('hash');
         $env = $this->argument('env');
-
-        SlackApi::message("🗑 Old Releases Purged Successfully!");
-
-        $message = "😎 *Deployment to \"$env\" Completed!*";
-        SlackApi::message($message, "View Release", config("envoyer.$env.url"));
+        $this->notify("🗑 Old Releases Purged Successfully!");
+        $this->notify("😎 *Deployment Completed: \"$env\" !*");
     }
 
     /**

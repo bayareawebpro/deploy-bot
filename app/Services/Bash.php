@@ -37,7 +37,7 @@ class Bash{
     ){
         $script = resource_path("scripts/$script.sh");
         if(in_array($host,['local', 'localhost'])){
-            $command = "/bin/sh {$script} {$arguments}";
+            $command = "/usr/bin/env bash {$script} {$arguments}";
         }else{
             $command = "ssh {$host} \"bash -s\" < {$script} {$arguments}";
         }
@@ -59,6 +59,7 @@ class Bash{
         $this->process = Process::fromShellCommandline($command);
         $this->process->setTimeout($timeout);
         $this->process->setTty($tty);
+        $this->process->enableOutput();
         $this->process->setEnv(array(
             "PATH" => implode(':', config('bash.path', []))
         ));

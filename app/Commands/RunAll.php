@@ -36,10 +36,10 @@ class RunAll extends Command
         ];
 
         $steps = [
-            'pre:clone',
-            'post:clone',
-            'pre:install',
-            'post:install',
+            //'pre:clone', //√
+            //'post:clone', //√
+            //'pre:install', //√
+            //'post:install', //√
             'pre:activate',
             'post:activate',
             'pre:purge',
@@ -47,8 +47,9 @@ class RunAll extends Command
         ];
 
         foreach ($steps as $step){
+            $this->alert($step);
             Artisan::call($step, $release);
-            $this->info(Artisan::output());
+            $this->line(Artisan::output());
         }
     }
 
