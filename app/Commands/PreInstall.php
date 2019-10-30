@@ -37,14 +37,4 @@ class PreInstall extends Command
         //$project = config("envoyer.$env.project");
         $this->notify("💉 Installing Dependencies...");
     }
-
-    /**
-     * Define the command's schedule.
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
-    }
 }

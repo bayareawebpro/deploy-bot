@@ -30,14 +30,19 @@ class PreActivate extends Command
     public function handle()
     {
         //php deploybot pre:activate "staging" "/home/forge/default/current" "XXX"
-
         $env = $this->argument('env');
         $hash= $this->argument('hash');
         $path= $this->argument('path');
 
-        Bash::script('status/down', $path);
+        if($this->isSuccessful(
+            Bash::script('status/down', $path)
+        )){
+            $this->notify("🧩 Maintenance Mode Activated.");
+        }else{
+            $this->error("🤬 Failed to Activate Maintenance Mode!");
+        }
 
-        Artisan::call('snapshots:run', [
+        $this->call('snapshots:run', [
             'hash' => $hash,
             'env' => $env,
         ]);
@@ -53,16 +58,10 @@ class PreActivate extends Command
             }
         }
 
-        Bash::script('status/up', $path);
-    }
-
-    /**
-     * Define the command's schedule.
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
+        if($this->isSuccessful(Bash::script('status/up', $path))){
+            $this->notify("🧩 Maintenance Mode Deactivated.");
+        }else{
+            $this->error("🤬 Maintenance Mode Deactivation Failed.");
+        }
     }
 }

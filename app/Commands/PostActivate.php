@@ -4,7 +4,6 @@ namespace App\Commands;
 
 use App\Services\Bash;
 use App\Commands\Traits\CommandNotifier;
-use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
 class PostActivate extends Command

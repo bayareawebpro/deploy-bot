@@ -30,20 +30,10 @@ class PostPurge extends Command
      */
     public function handle()
     {
-        $path = $this->argument('path');
-        $hash = $this->argument('hash');
-        $env = $this->argument('env');
+        //$path = $this->argument('path');
+        //$hash = $this->argument('hash');
+        //$env = $this->argument('env');
         $this->notify("🗑 Old Releases Purged Successfully!");
-        $this->notify("😎 Deployment Completed: \"$env\" !");
-    }
-
-    /**
-     * Define the command's schedule.
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
+        $this->notify("😎 Deployment Completed!");
     }
 }

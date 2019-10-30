@@ -6,7 +6,6 @@ use App\Services\Bash;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Commands\Traits\CommandNotifier;
-use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
 class CreateSnapshot extends Command
@@ -27,12 +26,12 @@ class CreateSnapshot extends Command
 
     /**
      * Execute the console command.
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
         //Insure Plenty of Resources.
-        @ini_set('max_execution_time', 10080);
+        @ini_set('max_execution_time', 900);
         @ini_set('memory_limit', '500M');
 
         //Run the Command Sequence.
@@ -47,13 +46,14 @@ class CreateSnapshot extends Command
     /**
      * Handle Production Environment.
      * @param $hash
+     * @return void
      */
-    protected function production($hash)
+    protected function production(string $hash)
     {
         $this->alert( "Deploying Staging Database to Production");
 
         //Check for Existing Release Snapshot.
-        $isNewRelease = (!Storage::disk('production')->exists("$hash.sql"));
+        $isNewRelease = $this->isNewRelease($hash);
 
         //Snapshots Directory / Insure Exists.
         $path = $this->makeDirectory(config('filesystems.disks.production.root'));
@@ -61,38 +61,17 @@ class CreateSnapshot extends Command
         //Current Snapshot Path.
         $snapshot = "$path/$hash.sql";
 
-        $stagDatabase = config('envoyer.staging.database', 'staging');
-        $prodDatabase = config('envoyer.production.database', 'production');
-
         //Create Production Snapshot from Staging Database.
         if ($isNewRelease) {
-            if($this->isSuccessful(
-                Bash::script('snapshots/dump', "$stagDatabase $snapshot")
-            )){
-                $this->notify("📸 Created Snapshot $hash from Staging Successfully. ($snapshot)");
-            }else{
-                $this->error("🤬 Failed to Create Snapshot!");
-            }
+            $this->snapshotCreate(config('envoyer.staging.database', 'staging'), $snapshot);
         }
 
         //Load Staging Snapshot into Production Database.
-        if($this->isSuccessful(
-            Bash::script('snapshots/load', "$prodDatabase $snapshot")
-        )){
-            $this->notify("🧩 Loaded Snapshot $hash to Production Successfully. ($snapshot)");
-        }else{
-            $this->error("🤬 Failed to Load Snapshot!");
-        }
+        $this->snapshotLoad(config('envoyer.production.database', 'production'), $snapshot);
 
         //Cleaning Up Old Snapshots.
         if ($isNewRelease) {
-            if($this->isSuccessful(
-                Bash::script('snapshots/trim', "$path")
-            )){
-                $this->notify("🗑 Old Snapshots Purged Up Successfully.");
-            }else{
-                $this->error("🤬 Failed to Purge Snapshots!");
-            }
+            $this->snapshotCleanup($path);
         }
     }
 
@@ -100,37 +79,71 @@ class CreateSnapshot extends Command
      * Handle Staging Environment.
      * @param $hash
      */
-    protected function staging($hash)
+    protected function staging(string $hash)
     {
         $this->alert("Creating Staging Database Snapshot");
 
-        //Snapshots Directory / Insure Exists.
+        //Insure Snapshots Directory Exists.
         $path = $this->makeDirectory(config('filesystems.disks.staging.root'));
 
         //Current Snapshot Path.
         $snapshot = "$path/$hash.sql";
 
+        //Create Snapshot for Staging Database.
         if(!Storage::disk('staging')->exists("$hash.sql")){
-            $stagDatabase = config('envoyer.staging.database', 'staging');
-            //Create Snapshot for Staging Database.
-            if($this->isSuccessful(
-                Bash::script('snapshots/dump', "$stagDatabase $snapshot")
-            )){
-                $this->notify("📸 Staging Snapshot Created Successfully. ($snapshot)");
-            }else{
-                $this->error("🤬 Failed to Create Snapshot! ($snapshot)");
-            }
+            $this->snapshotCreate(config('envoyer.staging.database', 'staging'), $snapshot);
         }else{
             $this->notify("📸 Staging Snapshot Already Exists. ($snapshot)");
         }
 
-        //Cleaning Up Old Snapshots.
-        if($this->isSuccessful(
+        //Cleanup Snapshots Directory
+        $this->snapshotCleanup($path);
+    }
+
+    /**
+     * Snapshots Clean
+     * @param string $path
+     */
+    protected function snapshotCleanup(string $path): void
+    {
+        if ($this->isSuccessful(
             Bash::script('snapshots/trim', "$path")
-        )){
-            $this->notify("🗑 Old Snapshots Cleaned Up Successfully.");
-        }else{
-            $this->error("🤬 Failed to Clean Snapshots!");
+        )) {
+            $this->notify("🗑 Old Snapshots Purged @ $path");
+        } else {
+            $this->error("🤬 Failed to Purge Snapshots @ $path");
+        }
+    }
+
+    /**
+     * Snapshot Create
+     * @param string $database
+     * @param string $path
+     */
+    protected function snapshotCreate(string $database, string $path): void
+    {
+        if ($this->isSuccessful(
+            Bash::script('snapshots/dump', "$database $path")
+        )) {
+            $this->notify("📸 Created Snapshot Successfully: $database @ $path");
+        } else {
+            $this->error("🤬 Failed to Create Snapshot!");
+        }
+    }
+
+    /**
+     * Snapshot Load
+     * @param string $database
+     * @param string $path
+     */
+    protected function snapshotLoad(string $database, string $path): void
+    {
+        if ($this->isSuccessful(
+            Bash::script('snapshots/load', "$database $path")
+        )) {
+            $this->notify("🧩 Loaded Snapshot Successfully: $database < $path");
+        } else {
+            $this->error("🤬 Failed to Load Snapshot!");
         }
     }
 
@@ -139,7 +152,7 @@ class CreateSnapshot extends Command
      * @param string $path
      * @return string $path;
      */
-    protected function makeDirectory(string $path)
+    protected function makeDirectory(string $path): string
     {
         if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0755, true);
@@ -148,12 +161,11 @@ class CreateSnapshot extends Command
     }
 
     /**
-     * Define the command's schedule.
-     * @param \Illuminate\Console\Scheduling\Schedule $schedule
-     * @return void
+     * @param $hash
+     * @return bool
      */
-    public function schedule(Schedule $schedule): void
+    protected function isNewRelease(string $hash): bool
     {
-        // $schedule->command(static::class)->everyMinute();
+        return (!Storage::disk('production')->exists("$hash.sql"));
     }
 }

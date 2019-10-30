@@ -28,7 +28,7 @@ class RunAll extends Command
     public function handle()
     {
         $release = [
-            'env' => 'staging',
+            'env' => 'production',
             'path' => '/Users/builder/Sites/test-project',
             'hash' => Str::random(12),
         ];
@@ -48,15 +48,5 @@ class RunAll extends Command
             $this->alert($step);
             $this->call($step, $release);
         }
-    }
-
-    /**
-     * Define the command's schedule.
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
     }
 }
