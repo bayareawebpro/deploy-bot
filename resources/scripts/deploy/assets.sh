@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd "$1" || return
-npm install --no-progress --no-optional
-npm run prod
+cd "$1" && \
+npm install --silent --no-progress --no-optional && \
+npm run production;
 

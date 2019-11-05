@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-cd "$1" || return
+cd "$1" && \
 php artisan migrate;
