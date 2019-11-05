@@ -43,6 +43,7 @@ trait CommandNotifier{
     /**
      * Notify Slack & Log Output.
      * @param string $string
+     * @param null $verbosity
      */
     public function error($string, $verbosity = null)
     {
