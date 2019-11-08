@@ -33,6 +33,7 @@ class PostActivate extends Command
         $this->cacheFlush($path);
         $this->cachePrime($path);
         $this->sitemapGenerate($env, $path);
+        $this->queueRestart($path);
     }
 
     /**
@@ -60,6 +61,22 @@ class PostActivate extends Command
         $this->notify("🛠 Priming Caches...");
         if ($this->isSuccessful(
             Bash::script('deploy/prime', $path)
+        )) {
+            $this->notify("🧩 Caches Primed Successfully.");
+        } else {
+            $this->error("🤬 Failed to Prime Caches!");
+        }
+    }
+
+    /**
+     * queue Restart
+     * @param $path
+     */
+    protected function queueRestart($path): void
+    {
+        $this->notify("🛠 Restarting Queues...");
+        if ($this->isSuccessful(
+            Bash::script('deploy/queue', $path)
         )) {
             $this->notify("🧩 Caches Primed Successfully.");
         } else {
