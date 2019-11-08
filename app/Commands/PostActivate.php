@@ -78,9 +78,9 @@ class PostActivate extends Command
         if ($this->isSuccessful(
             Bash::script('deploy/queue', $path)
         )) {
-            $this->notify("🧩 Caches Primed Successfully.");
+            $this->notify("🧩 Queues Restarted Successfully.");
         } else {
-            $this->error("🤬 Failed to Prime Caches!");
+            $this->error("🤬 Failed to Restart Queues!");
         }
     }
 
