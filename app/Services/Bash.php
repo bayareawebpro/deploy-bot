@@ -38,8 +38,8 @@ class Bash{
         $this->output = new Collection;
         $this->process = Process::fromShellCommandline($command);
         $this->process->setTimeout(600);
-        $this->process->setTty(false);
-        $this->process->enableOutput();
+        //$this->process->setTty(false);
+        //$this->process->enableOutput();
         $this->process->setEnv(array(
             "PATH" => implode(':', config('bash.path', []))
         ));
