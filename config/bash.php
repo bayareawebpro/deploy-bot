@@ -1,7 +1,7 @@
 <?php
 return [
     'path' => [
-        "/Applications/MAMP/Library/bin",
+        "/usr/local/opt/mysql@5.7/bin",
         "/usr/local/bin",
         "/usr/sbin",
         "/usr/bin",

@@ -1,7 +1,7 @@
 <?php
 
 namespace Tests\Feature;
-use Illuminate\Support\Facades\Artisan;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -18,7 +18,7 @@ class InspiringCommandTest extends TestCase
         $env = 'staging';
         $hash = Str::random(16);
         $arguments = [
-            'env' => $env,
+            'env'  => $env,
             'hash' => $hash,
         ];
         $this->artisan('snapshots:run', $arguments);
@@ -38,7 +38,7 @@ class InspiringCommandTest extends TestCase
         $env = 'production';
         $hash = Str::random(16);
         $arguments = [
-            'env' => $env,
+            'env'  => $env,
             'hash' => $hash,
         ];
         $this->artisan('snapshots:run', $arguments);

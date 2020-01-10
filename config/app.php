@@ -32,7 +32,7 @@ return [
     | services your application utilizes. Should be true in production.
     |
     */
-    'production' => true,
+    'production' => is_null(env('APP_ENV', null)),
 
     /*
     |--------------------------------------------------------------------------

@@ -166,6 +166,6 @@ class CreateSnapshot extends Command
      */
     protected function isNewRelease(string $hash): bool
     {
-        return (!Storage::disk('production')->exists("$hash.sql"));
+        return !Storage::disk('production')->exists("$hash.sql");
     }
 }
